@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>VHS Want List — Convention Edition</title>
+<style>
+  :root{
+    --bg:#0a0708;
+    --bg2:#150d0f;
+    --card:#1b1214;
+    --card-border:#3a1f22;
+    --text:#f1e6e0;
+    --muted:#a98d8a;
+    --accent:#ff2b2b;
+    --accent2:#ffb020;
+    --found:#3fae55;
+    --missing:#7a1f1f;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse at top, #2a1013 0%, var(--bg) 55%),
+      var(--bg);
+    color:var(--text);
+    font-family: 'Courier New', Courier, monospace;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:60px;
+  }
+  header{
+    position:sticky;
+    top:0;
+    z-index:10;
+    background:linear-gradient(180deg, #1a0507 0%, #0f0405 100%);
+    border-bottom:2px solid var(--accent);
+    padding:14px 16px 12px;
+    box-shadow:0 4px 18px rgba(0,0,0,0.6);
+  }
+  h1{
+    margin:0 0 2px;
+    font-size:1.5rem;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color:var(--accent);
+    text-shadow:0 0 8px rgba(255,43,43,0.6), 0 0 2px #fff;
+  }
+  .subtitle{
+    margin:0 0 10px;
+    font-size:0.78rem;
+    color:var(--muted);
+  }
+  .searchwrap{
+    display:flex;
+    gap:8px;
+  }
+  #search{
+    flex:1;
+    background:#0d0607;
+    border:1px solid var(--card-border);
+    color:var(--text);
+    padding:10px 12px;
+    font-size:1rem;
+    font-family:inherit;
+    border-radius:4px;
+    outline:none;
+  }
+  #search:focus{
+    border-color:var(--accent);
+    box-shadow:0 0 0 2px rgba(255,43,43,0.25);
+  }
+  .counts{
+    font-size:0.72rem;
+    color:var(--muted);
+    margin-top:6px;
+  }
+  .counts span{color:var(--accent2);font-weight:bold;}
+  main{
+    padding:14px 10px 0;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(150px, 1fr));
+    gap:12px;
+  }
+  .card{
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-radius:6px;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    transition:transform 0.1s ease, border-color 0.1s ease;
+  }
+  .card:active{transform:scale(0.98);}
+  .thumb{
+    width:100%;
+    aspect-ratio:3/4;
+    background:#000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    position:relative;
+  }
+  .thumb img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .thumb.missing{
+    background:repeating-linear-gradient(45deg, #1a0708, #1a0708 10px, #240a0c 10px, #240a0c 20px);
+    color:var(--accent);
+    font-size:0.68rem;
+    text-align:center;
+    padding:8px;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    line-height:1.4;
+  }
+  .badge{
+    position:absolute;
+    top:4px;
+    right:4px;
+    font-size:0.6rem;
+    padding:2px 5px;
+    border-radius:3px;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    font-weight:bold;
+  }
+  .badge.found{background:var(--found);color:#08150c;}
+  .badge.missing{background:var(--missing);color:#ffd7d7;}
+  .info{
+    padding:8px 8px 10px;
+  }
+  .title{
+    font-size:0.82rem;
+    font-weight:bold;
+    color:var(--text);
+    margin:0 0 2px;
+    line-height:1.25;
+  }
+  .year{
+    font-size:0.7rem;
+    color:var(--accent2);
+  }
+  .note{
+    font-size:0.65rem;
+    color:var(--muted);
+    margin-top:3px;
+    font-style:italic;
+  }
+  .src-link{
+    display:block;
+    font-size:0.62rem;
+    margin-top:4px;
+    color:#7a9cff;
+    text-decoration:none;
+    word-break:break-all;
+  }
+  .no-results{
+    text-align:center;
+    color:var(--muted);
+    padding:40px 10px;
+    font-size:0.9rem;
+  }
+  footer{
+    text-align:center;
+    color:var(--muted);
+    font-size:0.65rem;
+    padding:30px 10px 10px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>&#128128; VHS Want List</h1>
+  <p class="subtitle">Convention hunt list — tap search to filter</p>
+  <div class="searchwrap">
+    <input id="search" type="text" placeholder="Filter titles..." autocomplete="off">
+  </div>
+  <div class="counts"><span id="visible-count">0</span> / <span id="total-count">0</span> titles shown &middot; <span id="found-count">0</span> with box art</div>
+</header>
+
+<main>
+  <div class="grid" id="grid"></div>
+  <div class="no-results" id="no-results" style="display:none;">No titles match your search.</div>
+</main>
+
+<footer>Built for the hunt. Good luck out there.</footer>
+
+<script>
+const TITLES = __TITLES_JSON__;
+
+const grid = document.getElementById('grid');
+const searchInput = document.getElementById('search');
+const noResults = document.getElementById('no-results');
+const visibleCountEl = document.getElementById('visible-count');
+const totalCountEl = document.getElementById('total-count');
+const foundCountEl = document.getElementById('found-count');
+
+totalCountEl.textContent = TITLES.length;
+foundCountEl.textContent = TITLES.filter(t => t.status === 'found').length;
+
+function render(filter) {
+  const q = filter.trim().toLowerCase();
+  grid.innerHTML = '';
+  let visible = 0;
+
+  TITLES.forEach(t => {
+    if (q && !t.title.toLowerCase().includes(q)) return;
+    visible++;
+
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    const thumbWrap = document.createElement('div');
+    if (t.status === 'found') {
+      thumbWrap.className = 'thumb';
+      const img = document.createElement('img');
+      img.src = t.image;
+      img.alt = t.title + ' VHS box art';
+      img.loading = 'lazy';
+      thumbWrap.appendChild(img);
+      const badge = document.createElement('span');
+      badge.className = 'badge found';
+      badge.textContent = 'found';
+      thumbWrap.appendChild(badge);
+    } else {
+      thumbWrap.className = 'thumb missing';
+      thumbWrap.innerHTML = '<div>&#10060;<br>No VHS box<br>art found</div>';
+      const badge = document.createElement('span');
+      badge.className = 'badge missing';
+      badge.textContent = 'missing';
+      thumbWrap.appendChild(badge);
+    }
+    card.appendChild(thumbWrap);
+
+    const info = document.createElement('div');
+    info.className = 'info';
+    const title = document.createElement('p');
+    title.className = 'title';
+    title.textContent = t.title;
+    info.appendChild(title);
+    if (t.note) {
+      const note = document.createElement('div');
+      note.className = 'note';
+      note.textContent = t.note;
+      info.appendChild(note);
+    }
+    card.appendChild(info);
+
+    grid.appendChild(card);
+  });
+
+  visibleCountEl.textContent = visible;
+  noResults.style.display = visible === 0 ? 'block' : 'none';
+}
+
+searchInput.addEventListener('input', e => render(e.target.value));
+render('');
+</script>
+
+</body>
+</html>
