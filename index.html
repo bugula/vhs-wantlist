@@ -166,6 +166,45 @@
   .list-view .title{
     font-size:0.85rem;
   }
+  .card.checked{
+    opacity:0.5;
+  }
+  .card.checked .title{
+    text-decoration:line-through;
+  }
+  .checkbox{
+    width:22px;
+    min-width:22px;
+    height:22px;
+    margin:0 10px;
+    accent-color:var(--accent);
+  }
+  .list-view .checkbox{
+    margin:0 6px 0 10px;
+  }
+  .grid:not(.list-view) .card{
+    position:relative;
+  }
+  .grid:not(.list-view) .checkbox{
+    position:absolute;
+    top:6px;
+    left:6px;
+    margin:0;
+    z-index:2;
+  }
+  .section-label{
+    grid-column:1/-1;
+    color:var(--muted);
+    font-size:0.72rem;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    border-top:1px solid var(--card-border);
+    margin-top:6px;
+    padding-top:10px;
+  }
+  .list-view .section-label{
+    margin-top:10px;
+  }
   .badge{
     position:absolute;
     top:4px;
@@ -256,42 +295,75 @@ const foundCountEl = document.getElementById('found-count');
 totalCountEl.textContent = TITLES.length;
 foundCountEl.textContent = TITLES.filter(t => t.status === 'found').length;
 
+const checkedSet = new Set(JSON.parse(localStorage.getItem('vhsChecked') || '[]'));
+
+function saveChecked() {
+  localStorage.setItem('vhsChecked', JSON.stringify([...checkedSet]));
+}
+
+function buildCard(t) {
+  const isChecked = checkedSet.has(t.number);
+
+  const card = document.createElement('div');
+  card.className = 'card' + (isChecked ? ' checked' : '');
+
+  const checkbox = document.createElement('input');
+  checkbox.type = 'checkbox';
+  checkbox.className = 'checkbox';
+  checkbox.checked = isChecked;
+  checkbox.setAttribute('aria-label', 'Mark ' + t.title + ' as found');
+  checkbox.addEventListener('change', () => {
+    if (checkbox.checked) checkedSet.add(t.number);
+    else checkedSet.delete(t.number);
+    saveChecked();
+    render(searchInput.value);
+  });
+  card.appendChild(checkbox);
+
+  const thumbWrap = document.createElement('div');
+  if (t.status === 'found') {
+    thumbWrap.className = 'thumb';
+    const img = document.createElement('img');
+    img.src = t.image;
+    img.alt = t.title + ' VHS box art';
+    img.loading = 'lazy';
+    thumbWrap.appendChild(img);
+  } else {
+    thumbWrap.className = 'thumb missing';
+    thumbWrap.innerHTML = '<div>&#10060;<br>No VHS box<br>art found</div>';
+  }
+  card.appendChild(thumbWrap);
+
+  const info = document.createElement('div');
+  info.className = 'info';
+  const title = document.createElement('p');
+  title.className = 'title';
+  title.textContent = t.title;
+  info.appendChild(title);
+  card.appendChild(info);
+
+  return card;
+}
+
 function render(filter) {
   const q = filter.trim().toLowerCase();
   grid.innerHTML = '';
   let visible = 0;
 
-  TITLES.forEach(t => {
-    if (q && !t.title.toLowerCase().includes(q)) return;
-    visible++;
+  const matches = TITLES.filter(t => !q || t.title.toLowerCase().includes(q));
+  const remaining = matches.filter(t => !checkedSet.has(t.number));
+  const checked = matches.filter(t => checkedSet.has(t.number));
+  visible = matches.length;
 
-    const card = document.createElement('div');
-    card.className = 'card';
+  remaining.forEach(t => grid.appendChild(buildCard(t)));
 
-    const thumbWrap = document.createElement('div');
-    if (t.status === 'found') {
-      thumbWrap.className = 'thumb';
-      const img = document.createElement('img');
-      img.src = t.image;
-      img.alt = t.title + ' VHS box art';
-      img.loading = 'lazy';
-      thumbWrap.appendChild(img);
-    } else {
-      thumbWrap.className = 'thumb missing';
-      thumbWrap.innerHTML = '<div>&#10060;<br>No VHS box<br>art found</div>';
-    }
-    card.appendChild(thumbWrap);
-
-    const info = document.createElement('div');
-    info.className = 'info';
-    const title = document.createElement('p');
-    title.className = 'title';
-    title.textContent = t.title;
-    info.appendChild(title);
-    card.appendChild(info);
-
-    grid.appendChild(card);
-  });
+  if (checked.length) {
+    const label = document.createElement('div');
+    label.className = 'section-label';
+    label.textContent = `Found (${checked.length})`;
+    grid.appendChild(label);
+    checked.forEach(t => grid.appendChild(buildCard(t)));
+  }
 
   visibleCountEl.textContent = visible;
   noResults.style.display = visible === 0 ? 'block' : 'none';
