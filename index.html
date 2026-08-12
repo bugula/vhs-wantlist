@@ -193,7 +193,7 @@
 <footer>Built for the hunt. Good luck out there.</footer>
 
 <script>
-const TITLES = __TITLES_JSON__;
+const TITLES = [{"number": 1, "title": "Pieces", "status": "found", "note": "", "image": "images/01_pieces.jpg"}, {"number": 2, "title": "The Keep", "status": "found", "note": "", "image": "images/02_the-keep.jpg"}, {"number": 3, "title": "Vamp", "status": "found", "note": "", "image": "images/03_vamp.jpg"}, {"number": 4, "title": "Cellar Dweller", "status": "found", "note": "", "image": "images/04_cellar-dweller.jpg"}, {"number": 5, "title": "Blood Diner", "status": "found", "note": "", "image": "images/05_blood-diner.jpg"}, {"number": 6, "title": "Dead Heat", "status": "found", "note": "", "image": "images/06_dead-heat.jpg"}, {"number": 7, "title": "Waxwork", "status": "found", "note": "NZ/PAL pressing shown, not US", "image": "images/07_waxwork.jpg"}, {"number": 8, "title": "Bad Taste", "status": "found", "note": "possible later reissue, not orig. era", "image": "images/08_bad-taste.jpg"}, {"number": 9, "title": "Shocker", "status": "found", "note": "", "image": "images/09_shocker.jpg"}, {"number": 10, "title": "He Knows You're Alone", "status": "found", "note": "", "image": "images/10_he-knows-youre-alone.jpg"}, {"number": 11, "title": "The Boogeyman", "status": "found", "note": "1980 orig. (not Boogeyman 2)", "image": "images/11_the-boogeyman-1980.jpg"}, {"number": 12, "title": "Boogeyman 2", "status": "found", "note": "1983 sequel (not The Boogeyman)", "image": "images/12_boogeyman-2-1983.jpg"}, {"number": 13, "title": "Christmas Evil", "status": "found", "note": "", "image": "images/13_christmas-evil.jpg"}, {"number": 14, "title": "Nail Gun Massacre", "status": "found", "note": "", "image": "images/14_nail-gun-massacre.jpg"}, {"number": 15, "title": "Sledgehammer", "status": "found", "note": "", "image": "images/15_sledgehammer.jpg"}, {"number": 16, "title": "Boarding House", "status": "found", "note": "", "image": "images/16_boarding-house.jpg"}, {"number": 17, "title": "Body Shop", "status": "found", "note": "aka Doctor Gore, same film", "image": "images/17_body-shop.jpg"}, {"number": 18, "title": "Demon Queen", "status": "found", "note": "", "image": "images/18_demon-queen.jpg"}, {"number": 19, "title": "The Vindicator", "status": "found", "note": "", "image": "images/19_the-vindicator.jpg"}, {"number": 20, "title": "Tourist Trap", "status": "found", "note": "", "image": "images/20_tourist-trap.jpg"}, {"number": 21, "title": "Re-Animator", "status": "found", "note": "", "image": "images/21_re-animator.jpg"}, {"number": 22, "title": "Bride of Re-Animator", "status": "found", "note": "Swedish reissue box shown", "image": "images/22_bride-of-re-animator.jpg"}, {"number": 23, "title": "Beyond Re-Animator", "status": "found", "note": "rare late US VHS (2003)", "image": "images/23_beyond-re-animator.jpg"}, {"number": 24, "title": "Fear No Evil", "status": "found", "note": "", "image": "images/24_fear-no-evil.jpg"}, {"number": 25, "title": "Blood Beach", "status": "found", "note": "", "image": "images/25_blood-beach.jpg"}, {"number": 26, "title": "The Hand", "status": "found", "note": "", "image": "images/26_the-hand.jpg"}, {"number": 27, "title": "Student Bodies", "status": "found", "note": "", "image": "images/27_student-bodies.jpg"}, {"number": 28, "title": "Frankenhooker", "status": "found", "note": "", "image": "images/28_frankenhooker.jpg"}, {"number": 29, "title": "Mirror Mirror", "status": "found", "note": "promo/sealed variant shown", "image": "images/29_mirror-mirror.jpg"}, {"number": 30, "title": "Video Violence", "status": "found", "note": "", "image": "images/30_video-violence.jpg"}, {"number": 31, "title": "Remote Control", "status": "found", "note": "", "image": "images/31_remote-control.jpg"}, {"number": 32, "title": "Delicatessen", "status": "not_found", "note": "no real VHS scan found"}, {"number": 33, "title": "Demonic Toys", "status": "found", "note": "", "image": "images/33_demonic-toys.jpg"}, {"number": 34, "title": "Nightbreed", "status": "found", "note": "", "image": "images/34_nightbreed.jpg"}, {"number": 35, "title": "Mimic", "status": "found", "note": "", "image": "images/35_mimic.jpg"}, {"number": 36, "title": "Cronos", "status": "found", "note": "", "image": "images/36_cronos.jpg"}, {"number": 37, "title": "Deep Rising", "status": "found", "note": "", "image": "images/37_deep-rising.jpg"}, {"number": 38, "title": "Bats", "status": "found", "note": "", "image": "images/38_bats.jpg"}, {"number": 39, "title": "The Omen", "status": "found", "note": "", "image": "images/39_the-omen.jpg"}, {"number": 40, "title": "Sleepy Hollow", "status": "found", "note": "", "image": "images/40_sleepy-hollow.jpg"}, {"number": 41, "title": "The Fog", "status": "found", "note": "", "image": "images/41_the-fog.jpg"}, {"number": 42, "title": "Prom Night", "status": "found", "note": "", "image": "images/42_prom-night.jpg"}, {"number": 43, "title": "Terror Train", "status": "found", "note": "", "image": "images/43_terror-train.jpg"}, {"number": 44, "title": "Fade to Black", "status": "found", "note": "", "image": "images/44_fade-to-black.jpg"}, {"number": 45, "title": "Inferno", "status": "found", "note": "", "image": "images/45_inferno.jpg"}, {"number": 46, "title": "Humanoids from the Deep", "status": "found", "note": "", "image": "images/46_humanoids-from-the-deep.jpg"}, {"number": 47, "title": "Alligator", "status": "found", "note": "", "image": "images/47_alligator.jpg"}, {"number": 48, "title": "Altered States", "status": "found", "note": "", "image": "images/48_altered-states.jpg"}, {"number": 49, "title": "Graduation Day", "status": "found", "note": "", "image": "images/49_graduation-day.jpg"}, {"number": 50, "title": "Dead and Buried", "status": "found", "note": "", "image": "images/50_dead-and-buried.jpg"}, {"number": 51, "title": "The Beast Within", "status": "found", "note": "", "image": "images/51_the-beast-within.jpg"}, {"number": 52, "title": "Slumber Party Massacre", "status": "found", "note": "", "image": "images/52_slumber-party-massacre.jpg"}, {"number": 53, "title": "Alone in the Dark", "status": "found", "note": "", "image": "images/53_alone-in-the-dark.jpg"}];
 
 const grid = document.getElementById('grid');
 const searchInput = document.getElementById('search');
@@ -225,17 +225,9 @@ function render(filter) {
       img.alt = t.title + ' VHS box art';
       img.loading = 'lazy';
       thumbWrap.appendChild(img);
-      const badge = document.createElement('span');
-      badge.className = 'badge found';
-      badge.textContent = 'found';
-      thumbWrap.appendChild(badge);
     } else {
       thumbWrap.className = 'thumb missing';
       thumbWrap.innerHTML = '<div>&#10060;<br>No VHS box<br>art found</div>';
-      const badge = document.createElement('span');
-      badge.className = 'badge missing';
-      badge.textContent = 'missing';
-      thumbWrap.appendChild(badge);
     }
     card.appendChild(thumbWrap);
 
@@ -245,12 +237,6 @@ function render(filter) {
     title.className = 'title';
     title.textContent = t.title;
     info.appendChild(title);
-    if (t.note) {
-      const note = document.createElement('div');
-      note.className = 'note';
-      note.textContent = t.note;
-      info.appendChild(note);
-    }
     card.appendChild(info);
 
     grid.appendChild(card);
