@@ -78,10 +78,38 @@
   main{
     padding:14px 10px 0;
   }
+  .viewToggle{
+    display:flex;
+    gap:6px;
+    margin-top:10px;
+  }
+  .viewToggle button{
+    flex:1;
+    background:#0d0607;
+    border:1px solid var(--card-border);
+    color:var(--muted);
+    padding:7px 10px;
+    font-size:0.72rem;
+    font-family:inherit;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    border-radius:4px;
+  }
+  .viewToggle button.active{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:#1a0507;
+    font-weight:bold;
+  }
   .grid{
     display:grid;
     grid-template-columns:repeat(auto-fill, minmax(150px, 1fr));
     gap:12px;
+  }
+  .grid.list-view{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
   }
   .card{
     background:var(--card);
@@ -91,6 +119,10 @@
     display:flex;
     flex-direction:column;
     transition:transform 0.1s ease, border-color 0.1s ease;
+  }
+  .list-view .card{
+    flex-direction:row;
+    align-items:center;
   }
   .card:active{transform:scale(0.98);}
   .thumb{
@@ -102,6 +134,11 @@
     justify-content:center;
     overflow:hidden;
     position:relative;
+  }
+  .list-view .thumb{
+    width:56px;
+    min-width:56px;
+    aspect-ratio:3/4;
   }
   .thumb img{
     width:100%;
@@ -118,6 +155,16 @@
     text-transform:uppercase;
     letter-spacing:0.5px;
     line-height:1.4;
+  }
+  .list-view .thumb.missing{
+    font-size:0.45rem;
+    padding:2px;
+  }
+  .list-view .info{
+    padding:6px 10px;
+  }
+  .list-view .title{
+    font-size:0.85rem;
   }
   .badge{
     position:absolute;
@@ -183,6 +230,10 @@
     <input id="search" type="text" placeholder="Filter titles..." autocomplete="off">
   </div>
   <div class="counts"><span id="visible-count">0</span> / <span id="total-count">0</span> titles shown &middot; <span id="found-count">0</span> with box art</div>
+  <div class="viewToggle">
+    <button id="btn-list" type="button">List</button>
+    <button id="btn-tile" type="button">Tiles</button>
+  </div>
 </header>
 
 <main>
@@ -246,8 +297,22 @@ function render(filter) {
   noResults.style.display = visible === 0 ? 'block' : 'none';
 }
 
+const btnList = document.getElementById('btn-list');
+const btnTile = document.getElementById('btn-tile');
+
+function setView(view) {
+  grid.classList.toggle('list-view', view === 'list');
+  btnList.classList.toggle('active', view === 'list');
+  btnTile.classList.toggle('active', view === 'tile');
+  localStorage.setItem('vhsView', view);
+}
+
+btnList.addEventListener('click', () => setView('list'));
+btnTile.addEventListener('click', () => setView('tile'));
+
 searchInput.addEventListener('input', e => render(e.target.value));
 render('');
+setView(localStorage.getItem('vhsView') === 'tile' ? 'tile' : 'list');
 </script>
 
 </body>
